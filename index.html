@@ -42,13 +42,14 @@
     .recent-list{max-height:150px;overflow-y:auto;font-size:14px;}
     canvas{max-height:250px !important;}
 
-    /* Responsive */
+    /* Responsive for mobile: stack cards vertically */
     @media (max-width:768px){
       body{flex-direction:column;}
       .sidebar{width:100%;flex-direction:row;justify-content:space-between;padding:10px;}
       .main{padding:15px;grid-template-columns:1fr;}
       .form input,.form select,.form button{width:100%;}
       table, thead, tbody, th, td{font-size:12px;}
+      .card{width:100%;}
     }
   </style>
 </head>
@@ -61,7 +62,6 @@
 
   <!-- Main Content -->
   <div class="main">
-    <!-- Income Block -->
     <div class="card">
       <h2>Set Income</h2>
       <div class="form">
@@ -70,7 +70,6 @@
       </div>
     </div>
 
-    <!-- Balance Block -->
     <div class="card">
       <h2>Balance</h2>
       <div class="summary-box"><span>Income:</span><span>Rs <span id="incomeVal">0</span></span></div>
@@ -79,7 +78,6 @@
       <div id="alertMsg" style="color:#ef4444;font-weight:bold;"></div>
     </div>
 
-    <!-- Add Expense Block -->
     <div class="card">
       <h2>Add Expense</h2>
       <div class="form">
@@ -97,7 +95,6 @@
       </div>
     </div>
 
-    <!-- Savings Goal Block -->
     <div class="card">
       <h2>Savings Goal</h2>
       <div class="form">
@@ -108,19 +105,16 @@
       <div class="progress"><div class="progress-bar" id="goalBar"></div></div>
     </div>
 
-    <!-- Category Summary -->
     <div class="card">
       <h2>Category Chart</h2>
       <canvas id="catChart"></canvas>
     </div>
 
-    <!-- Recent Transactions -->
     <div class="card">
       <h2>Recent Transactions</h2>
       <div class="recent-list" id="recentList"></div>
     </div>
 
-    <!-- Expense List Block -->
     <div class="card" style="grid-column: span 2; position:relative; z-index:0;">
       <h2>Expense List</h2>
       <input type="text" id="search" placeholder="Search by description/category" onkeyup="render()" style="margin-bottom:10px;width:100%;padding:8px;border-radius:6px;border:none;">
@@ -159,7 +153,6 @@
     }
 
     function deleteExpense(id){expenses=expenses.filter(e=>e.id!==id);localStorage.setItem("expenses",JSON.stringify(expenses));render();}
-
     function toggleTheme(){document.body.classList.toggle("light");}
 
     function render(){
