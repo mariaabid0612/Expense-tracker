@@ -1,186 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Expense Tracker</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
-    body{display:flex;min-height:100vh;background:#0f172a;color:#f9fafb;transition:background .3s,color .3s;}
-    body.light{background:#f1f5f9;color:#0f172a;}
-    /* Sidebar */
-    .sidebar{width:220px;background:#1e293b;padding:20px;display:flex;flex-direction:column;align-items:center;}
-    body.light .sidebar{background:#e2e8f0;}
-    .logo{font-size:22px;font-weight:bold;margin-bottom:40px;color:#38bdf8;}
-    .toggle-btn{margin-top:auto;background:#38bdf8;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;color:#0f172a;}
-    /* Main */
-    .main{flex:1;padding:30px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;align-items:start;}
-    .card{background:#1e293b;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.4);overflow:hidden;position:relative;z-index:0;}
-    body.light .card{background:#fff;}
-    .card h2{margin-bottom:15px;font-size:18px;color:#facc15;}
-    .form{display:flex;flex-direction:column;gap:10px;}
-    .form input,.form select{padding:10px;border:none;border-radius:6px;background:#334155;color:#f1f5f9;}
-    body.light .form input,body.light .form select{background:#e2e8f0;color:#0f172a;}
-    .form button{background:#38bdf8;color:#0f172a;font-weight:bold;border:none;padding:10px;border-radius:6px;cursor:pointer;}
-    .form button:hover{background:#0ea5e9;}
-    table{width:100%;border-collapse:collapse;display:block;max-height:200px;overflow-y:auto;position:relative;z-index:1;}
-    thead,tbody{display:table;width:100%;table-layout:fixed;}
-    th,td{padding:8px;text-align:left;border-bottom:1px solid #334155;}
-    body.light th,body.light td{border-bottom:1px solid #cbd5e1;}
-    th{color:#facc15;}
-    .delete-btn{background:#ef4444;color:#fff;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;}
-    .delete-btn:hover{background:#dc2626;}
-    .summary-box{font-size:15px;font-weight:bold;display:flex;justify-content:space-between;margin-bottom:6px;}
-    .progress{background:#334155;border-radius:6px;height:12px;width:100%;overflow:hidden;}
-    .progress-bar{height:100%;background:#38bdf8;width:0%;}
-    .recent-list{max-height:150px;overflow-y:auto;font-size:14px;}
-    canvas{max-height:250px !important;}
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Expense Tracker</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
+body{display:flex;min-height:100vh;background:#0f172a;color:#f9fafb;transition:background .3s,color .3s;flex-wrap:wrap;}
+body.light{background:#f1f5f9;color:#0f172a;}
+/* Sidebar */
+.sidebar{width:220px;background:#1e293b;padding:20px;display:flex;flex-direction:column;align-items:center;}
+body.light .sidebar{background:#e2e8f0;}
+.logo{font-size:22px;font-weight:bold;margin-bottom:40px;color:#38bdf8;text-align:center;}
+.toggle-btn{margin-top:auto;background:#38bdf8;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;color:#0f172a;}
+/* Main */
+.main{flex:1;padding:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;align-items:start;}
+.card{background:#1e293b;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.4);overflow:hidden;position:relative;z-index:0;}
+body.light .card{background:#fff;}
+.card h2{margin-bottom:15px;font-size:18px;color:#facc15;}
+.form{display:flex;flex-direction:column;gap:10px;}
+.form input,.form select{padding:10px;border:none;border-radius:6px;background:#334155;color:#f1f5f9;}
+body.light .form input,body.light .form select{background:#e2e8f0;color:#0f172a;}
+.form button{background:#38bdf8;color:#0f172a;font-weight:bold;border:none;padding:10px;border-radius:6px;cursor:pointer;}
+.form button:hover{background:#0ea5e9;}
+table{width:100%;border-collapse:collapse;display:block;max-height:200px;overflow-y:auto;position:relative;z-index:1;}
+thead,tbody{display:table;width:100%;table-layout:fixed;}
+th,td{padding:8px;text-align:left;border-bottom:1px solid #334155;}
+body.light th,body.light td{border-bottom:1px solid #cbd5e1;}
+th{color:#facc15;}
+.delete-btn{background:#ef4444;color:#fff;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;}
+.delete-btn:hover{background:#dc2626;}
+.summary-box{font-size:15px;font-weight:bold;display:flex;justify-content:space-between;margin-bottom:6px;}
+.progress{background:#334155;border-radius:6px;height:12px;width:100%;overflow:hidden;}
+.progress-bar{height:100%;background:#38bdf8;width:0%;}
+.recent-list{max-height:150px;overflow-y:auto;font-size:14px;}
+canvas{max-height:250px !important;width:100% !important;}
+
+/* Mobile Responsive */
+@media (max-width:768px){
+  body{flex-direction:column;}
+  .sidebar{width:100%;flex-direction:row;justify-content:space-between;padding:10px;}
+  .main{grid-template-columns:1fr;}
+  table{max-height:150px;}
+  .form input,.form select,.form button{width:100%;}
+}
+</style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <div class="logo">💰 Expense Tracker</div>
-    <button class="toggle-btn" onclick="toggleTheme()">Toggle Theme</button>
-  </div>
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="logo">💰 Expense Tracker</div>
+  <button class="toggle-btn" onclick="toggleTheme()">Toggle Theme</button>
+</div>
 
-  <!-- Main Content -->
-  <div class="main">
-    <!-- Income Block -->
-    <div class="card">
-      <h2>Set Income</h2>
-      <div class="form">
-        <input type="number" id="income" placeholder="Monthly Income" />
-        <button onclick="setIncome()">Save</button>
-      </div>
-    </div>
+<!-- Main Content -->
+<div class="main">
+<!-- Income Block -->
+<div class="card">
+<h2>Set Income</h2>
+<div class="form">
+<input type="number" id="income" placeholder="Monthly Income" />
+<button onclick="setIncome()">Save</button>
+</div>
+</div>
 
-    <!-- Balance Block -->
-    <div class="card">
-      <h2>Balance</h2>
-      <div class="summary-box"><span>Income:</span><span>Rs <span id="incomeVal">0</span></span></div>
-      <div class="summary-box"><span>Expenses:</span><span>Rs <span id="expenseVal">0</span></span></div>
-      <div class="summary-box"><span>Balance:</span><span>Rs <span id="balanceVal">0</span></span></div>
-      <div id="alertMsg" style="color:#ef4444;font-weight:bold;"></div>
-    </div>
+<!-- Balance Block -->
+<div class="card">
+<h2>Balance</h2>
+<div class="summary-box"><span>Income:</span><span>Rs <span id="incomeVal">0</span></span></div>
+<div class="summary-box"><span>Expenses:</span><span>Rs <span id="expenseVal">0</span></span></div>
+<div class="summary-box"><span>Balance:</span><span>Rs <span id="balanceVal">0</span></span></div>
+<div id="alertMsg" style="color:#ef4444;font-weight:bold;"></div>
+</div>
 
-    <!-- Add Expense Block -->
-    <div class="card">
-      <h2>Add Expense</h2>
-      <div class="form">
-        <input type="text" id="desc" placeholder="Description" />
-        <input type="number" id="amount" placeholder="Amount" />
-        <select id="category">
-          <option value="Food">Food</option>
-          <option value="Travel">Travel</option>
-          <option value="Shopping">Shopping</option>
-          <option value="Bills">Bills</option>
-          <option value="Other">Other</option>
-        </select>
-        <input type="month" id="month" />
-        <button onclick="addExpense()">Add</button>
-      </div>
-    </div>
+<!-- Add Expense Block -->
+<div class="card">
+<h2>Add Expense</h2>
+<div class="form">
+<input type="text" id="desc" placeholder="Description" />
+<input type="number" id="amount" placeholder="Amount" />
+<select id="category">
+<option value="Food">Food</option>
+<option value="Travel">Travel</option>
+<option value="Shopping">Shopping</option>
+<option value="Bills">Bills</option>
+<option value="Other">Other</option>
+</select>
+<input type="month" id="month" />
+<button onclick="addExpense()">Add</button>
+</div>
+</div>
 
-    <!-- Savings Goal Block -->
-    <div class="card">
-      <h2>Savings Goal</h2>
-      <div class="form">
-        <input type="number" id="goal" placeholder="Enter Goal" />
-        <button onclick="setGoal()">Set Goal</button>
-      </div>
-      <div class="summary-box"><span>Goal:</span><span>Rs <span id="goalVal">0</span></span></div>
-      <div class="progress"><div class="progress-bar" id="goalBar"></div></div>
-    </div>
+<!-- Savings Goal Block -->
+<div class="card">
+<h2>Savings Goal</h2>
+<div class="form">
+<input type="number" id="goal" placeholder="Enter Goal" />
+<button onclick="setGoal()">Set Goal</button>
+</div>
+<div class="summary-box"><span>Goal:</span><span>Rs <span id="goalVal">0</span></span></div>
+<div class="progress"><div class="progress-bar" id="goalBar"></div></div>
+</div>
 
-    <!-- Category Summary -->
-    <div class="card">
-      <h2>Category Chart</h2>
-      <canvas id="catChart"></canvas>
-    </div>
+<!-- Category Summary -->
+<div class="card">
+<h2>Category Chart</h2>
+<canvas id="catChart"></canvas>
+</div>
 
-    <!-- Recent Transactions -->
-    <div class="card">
-      <h2>Recent Transactions</h2>
-      <div class="recent-list" id="recentList"></div>
-    </div>
+<!-- Recent Transactions -->
+<div class="card">
+<h2>Recent Transactions</h2>
+<div class="recent-list" id="recentList"></div>
+</div>
 
-    <!-- Expense List Block -->
-    <div class="card" style="grid-column: span 2; position:relative; z-index:0;">
-      <h2>Expense List</h2>
-      <input type="text" id="search" placeholder="Search by description/category" onkeyup="render()" style="margin-bottom:10px;width:100%;padding:8px;border-radius:6px;border:none;">
-      <table id="expenseTable">
-        <thead>
-          <tr>
-            <th>Description</th><th>Amount</th><th>Category</th><th>Month</th><th>Action</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </div>
+<!-- Expense List Block -->
+<div class="card" style="grid-column: span 2; position:relative; z-index:0;">
+<h2>Expense List</h2>
+<input type="text" id="search" placeholder="Search by description/category" onkeyup="render()" style="margin-bottom:10px;width:100%;padding:8px;border-radius:6px;border:none;">
+<table id="expenseTable">
+<thead>
+<tr>
+<th>Description</th><th>Amount</th><th>Category</th><th>Month</th><th>Action</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+</div>
+</div>
 
-  <script>
-    let expenses=JSON.parse(localStorage.getItem("expenses"))||[];
-    let income=JSON.parse(localStorage.getItem("income"))||0;
-    let goal=JSON.parse(localStorage.getItem("goal"))||0;
-    let chart;
+<script>
+let expenses=JSON.parse(localStorage.getItem("expenses"))||[];
+let income=JSON.parse(localStorage.getItem("income"))||0;
+let goal=JSON.parse(localStorage.getItem("goal"))||0;
+let chart;
 
-    function setIncome(){income=parseFloat(document.getElementById("income").value)||0;localStorage.setItem("income",income);render();}
-    function setGoal(){goal=parseFloat(document.getElementById("goal").value)||0;localStorage.setItem("goal",goal);render();}
+function setIncome(){income=parseFloat(document.getElementById("income").value)||0;localStorage.setItem("income",income);render();}
+function setGoal(){goal=parseFloat(document.getElementById("goal").value)||0;localStorage.setItem("goal",goal);render();}
 
-    function addExpense(){
-      const desc=document.getElementById("desc").value;
-      const amount=parseFloat(document.getElementById("amount").value);
-      const cat=document.getElementById("category").value;
-      const month=document.getElementById("month").value||"2025-01";
-      if(!desc||isNaN(amount)||amount<=0){alert("Enter valid data");return;}
-      const expense={id:Date.now(),desc,amount,cat,month};
-      expenses.push(expense);
-      localStorage.setItem("expenses",JSON.stringify(expenses));
-      document.getElementById("desc").value="";
-      document.getElementById("amount").value="";
-      render();
-    }
+function addExpense(){
+const desc=document.getElementById("desc").value;
+const amount=parseFloat(document.getElementById("amount").value);
+const cat=document.getElementById("category").value;
+const month=document.getElementById("month").value||"2025-01";
+if(!desc||isNaN(amount)||amount<=0){alert("Enter valid data");return;}
+const expense={id:Date.now(),desc,amount,cat,month};
+expenses.push(expense);
+localStorage.setItem("expenses",JSON.stringify(expenses));
+document.getElementById("desc").value="";
+document.getElementById("amount").value="";
+render();
+}
 
-    function deleteExpense(id){expenses=expenses.filter(e=>e.id!==id);localStorage.setItem("expenses",JSON.stringify(expenses));render();}
+function deleteExpense(id){expenses=expenses.filter(e=>e.id!==id);localStorage.setItem("expenses",JSON.stringify(expenses));render();}
+function toggleTheme(){document.body.classList.toggle("light");}
 
-    function toggleTheme(){document.body.classList.toggle("light");}
+function render(){
+const search=document.getElementById("search")?.value.toLowerCase()||"";
+const tbody=document.querySelector("#expenseTable tbody");
+tbody.innerHTML="";
+let totalExp=0;let recent=[];
+expenses.filter(e=>e.desc.toLowerCase().includes(search)||e.cat.toLowerCase().includes(search)).forEach(e=>{
+totalExp+=e.amount;
+tbody.innerHTML+=`<tr><td>${e.desc}</td><td>Rs ${e.amount}</td><td>${e.cat}</td><td>${e.month}</td><td><button class="delete-btn" onclick="deleteExpense(${e.id})">Delete</button></td></tr>`;
+recent.push(e);
+});
 
-    function render(){
-      const search=document.getElementById("search")?.value.toLowerCase()||"";
-      const tbody=document.querySelector("#expenseTable tbody");
-      tbody.innerHTML="";
-      let totalExp=0;let recent=[];
-      expenses.filter(e=>e.desc.toLowerCase().includes(search)||e.cat.toLowerCase().includes(search)).forEach(e=>{
-        totalExp+=e.amount;
-        tbody.innerHTML+=`<tr><td>${e.desc}</td><td>Rs ${e.amount}</td><td>${e.cat}</td><td>${e.month}</td><td><button class="delete-btn" onclick="deleteExpense(${e.id})">Delete</button></td></tr>`;
-        recent.push(e);
-      });
+document.getElementById("incomeVal").innerText=income;
+document.getElementById("expenseVal").innerText=totalExp;
+document.getElementById("balanceVal").innerText=income-totalExp;
 
-      document.getElementById("incomeVal").innerText=income;
-      document.getElementById("expenseVal").innerText=totalExp;
-      document.getElementById("balanceVal").innerText=income-totalExp;
+if(income>0 && totalExp>0.8*income){document.getElementById("alertMsg").innerText="⚠️ Warning: Spending exceeds 80% of income!";}else{document.getElementById("alertMsg").innerText="";}
 
-      if(income>0 && totalExp>0.8*income){document.getElementById("alertMsg").innerText="⚠️ Warning: Spending exceeds 80% of income!";}else{document.getElementById("alertMsg").innerText="";}
+document.getElementById("goalVal").innerText=goal;
+const bal=income-totalExp;
+const perc=goal>0?Math.min((bal/goal)*100,100):0;
+document.getElementById("goalBar").style.width=perc+"%";
 
-      document.getElementById("goalVal").innerText=goal;
-      const bal=income-totalExp;
-      const perc=goal>0?Math.min((bal/goal)*100,100):0;
-      document.getElementById("goalBar").style.width=perc+"%";
+let cats={};
+expenses.forEach(e=>{cats[e.cat]=(cats[e.cat]||0)+e.amount});
+if(chart)chart.destroy();
+chart=new Chart(document.getElementById("catChart"),{type:'doughnut',data:{labels:Object.keys(cats),datasets:[{data:Object.values(cats),backgroundColor:["#38bdf8","#facc15","#ef4444","#22c55e","#a855f7"]}]},options:{plugins:{legend:{position:'bottom'}}}});
 
-      let cats={};
-      expenses.forEach(e=>{cats[e.cat]=(cats[e.cat]||0)+e.amount});
-      if(chart)chart.destroy();
-      chart=new Chart(document.getElementById("catChart"),{type:'doughnut',data:{labels:Object.keys(cats),datasets:[{data:Object.values(cats),backgroundColor:["#38bdf8","#facc15","#ef4444","#22c55e","#a855f7"]}]},options:{plugins:{legend:{position:'bottom'}}}});
-
-      const rec=recent.slice(-5).reverse();
-      const recDiv=document.getElementById("recentList");
-      recDiv.innerHTML="";
-      rec.forEach(r=>{recDiv.innerHTML+=`<div>• ${r.desc} - Rs ${r.amount} (${r.cat})</div>`;});
-    }
-    render();
-  </script>
+const rec=recent.slice(-5).reverse();
+const recDiv=document.getElementById("recentList");
+recDiv.innerHTML="";
+rec.forEach(r=>{recDiv.innerHTML+=`<div>• ${r.desc} - Rs ${r.amount} (${r.cat})</div>`;});
+}
+render();
+</script>
 </body>
 </html>
